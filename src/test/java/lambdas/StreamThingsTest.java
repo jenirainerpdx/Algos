@@ -2,11 +2,14 @@ package lambdas;
 
 import lambdas.domain.Album;
 import lambdas.domain.Artist;
+import lambdas.domain.Track;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,4 +66,24 @@ class StreamThingsTest {
 		assertTrue(actual.contains("NULL ALBUM"));
 	}
 
+	@Test
+	public void testGetTracksSortedByTrackName() {
+		List<Track> actual = classUnderTest.getAllTracksSortedByTrackName(testAlbums.getTestAlbumList());
+		Track first = actual.get(0);
+		Track last = actual.get(actual.size() - 1);
+		assertEquals("3005", first.getName());
+		assertEquals("When We Were Young", last.getName());
+
+	}
+
+	@Test
+	public void testGetAlbumsByTrackCount(){
+		Map<String, Integer> actual = classUnderTest.getTrackCountsByAlbumName(testAlbums.getTestAlbumList());
+		int previousAlbumCount = 0;
+		for (String album : actual.keySet()) {
+			int currentVal = actual.get(album);
+			assertTrue(currentVal > previousAlbumCount);
+			previousAlbumCount = currentVal;
+		}
+	}
 }

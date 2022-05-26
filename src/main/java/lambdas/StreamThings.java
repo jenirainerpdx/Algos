@@ -2,9 +2,13 @@ package lambdas;
 
 import lambdas.domain.Album;
 import lambdas.domain.Artist;
+import lambdas.domain.Track;
 
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class StreamThings {
@@ -33,6 +37,42 @@ public class StreamThings {
 		return albums.stream()
 				.map(this::getAlbumNameInAllCaps)
 				.collect(Collectors.toList());
+	}
+
+	/**
+	 * A flatmap operation to combine the lists of tracks within the list of albums and then sort by track name.
+	 *
+	 * @param albums List of type Album
+	 * @return List of Track sorted by trackName.
+	 * TODO: figure out why flatMapToDouble, flatMapToInt, flatMapToLong exist
+	 * is it simply to allow stream of primitives rather than objects?
+	 */
+	public List<Track> getAllTracksSortedByTrackName(List<Album> albums) {
+		return albums.stream()
+				.flatMap(album -> album.getTracks().stream())
+				.sorted(Comparator.comparing(Track::getName))
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Somewhat convoluted for the sorting of the map.  Not sure if it is efficient.
+	 *
+	 * @param albums List of Album objects
+	 * @return a linkedHashMap so that it holds sorting where the Album Name is key and the value is count of tracks.
+	 * Sort order is by count of tracks in asc.
+	 */
+	public Map<String, Integer> getTrackCountsByAlbumName(List<Album> albums) {
+		Map<String, Integer> unsorted = albums.stream()
+				.collect(Collectors.toMap(
+						album -> album.getName(),
+						album -> album.getTracks().size()
+				));
+		return unsorted.entrySet()
+				.stream()
+				.sorted(Map.Entry.comparingByValue())
+				.collect(Collectors.toMap(entry -> entry.getKey(),
+						entry -> entry.getValue(),
+						(e1, e2) -> e1, LinkedHashMap::new));
 	}
 
 
