@@ -68,6 +68,7 @@ public class TestAlbums {
 		Artist jhene = new Artist("Jhene Aiko", Collections.emptySet(), UNKNOWN_ORIGIN);
 		Artist chance = new Artist("Chance the Rapper", Collections.emptySet(), UNKNOWN_ORIGIN);
 		Artist banks = new Artist("Azealia Banks", Collections.emptySet(), UNKNOWN_ORIGIN);
+		Artist misc = new Artist("Not really an artist", Collections.emptySet(), UNKNOWN_ORIGIN);
 		Album gambinoBecause = new Album(
 				List.of("The Library (Intro)",
 						"I.Crawl",
@@ -89,7 +90,7 @@ public class TestAlbums {
 						"II. Earth: The Oldest Computer (The Last Night) [feat. Azealia Banks]",
 						"III. Life: The Biggest Troll [Andrew Auernheimer]"
 				),
-				List.of(childish, jhene, chance, banks),
+				List.of(childish, jhene, chance, banks, misc),
 				"Because the Internet"
 		);
 		testAlbumList.add(gambinoBecause);

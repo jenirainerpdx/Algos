@@ -6,23 +6,29 @@ import lambdas.domain.Track;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class StreamThingsTest {
 
-	StreamThings classUnderTest = new StreamThings();
-	TestAlbums testAlbums = new TestAlbums();
-	Album malformedAlbum = new Album(null,
-			Collections.EMPTY_LIST,
-			Collections.EMPTY_LIST);
-	List<Album> albumsWithMalformed = buildMalformedList();
+	private static final String BECAUSE_THE_INTERNET = "Because the Internet";
+	private StreamThings classUnderTest = new StreamThings();
+	private TestAlbums testAlbums = new TestAlbums();
+	private Album malformedAlbum;
 
-	List<String> albumNames = List.of(
+	{
+		malformedAlbum = new Album(null,
+				Collections.EMPTY_LIST,
+				Collections.EMPTY_LIST);
+	}
+
+	private List<Album> albumsWithMalformed = buildMalformedList();
+
+	private List<String> albumNames = List.of(
 			"21",
 			"25",
 			"BECAUSE THE INTERNET",
@@ -77,7 +83,7 @@ class StreamThingsTest {
 	}
 
 	@Test
-	public void testGetAlbumsByTrackCount(){
+	public void testGetAlbumsByTrackCount() {
 		Map<String, Integer> actual = classUnderTest.getTrackCountsByAlbumName(testAlbums.getTestAlbumList());
 		int previousAlbumCount = 0;
 		for (String album : actual.keySet()) {
@@ -86,4 +92,37 @@ class StreamThingsTest {
 			previousAlbumCount = currentVal;
 		}
 	}
+
+	@Test
+	public void testGetAlbumWithLargestTrackCount() {
+		Album mostTracks = classUnderTest.findAlbumWithMostTracks(testAlbums.getTestAlbumList());
+		assertEquals(BECAUSE_THE_INTERNET, mostTracks.getName());
+	}
+
+	/**
+	 * This test currently fails.  There is something incorrect in my logic.  Not flatmapping correctly yet.
+	 */
+	@Test
+	public void testGetAlbumWithMostArtists() {
+		Album mostArtists = classUnderTest.findAlbumWithBiggestBand(testAlbums.getTestAlbumList());
+		assertEquals(BECAUSE_THE_INTERNET, mostArtists.getName());
+	}
+
+	@Test
+	public void testFindByName() {
+		Optional<Album> maybeBecause = classUnderTest
+				.findAlbumByName(BECAUSE_THE_INTERNET, testAlbums.getTestAlbumList());
+		assertTrue(maybeBecause.isPresent());
+		Album maybe = maybeBecause.get();
+		assertEquals("Childish Gambino", maybe.getMusicians().get(0).getName());
+	}
+
+	@Test
+	public void testGetListOfMusiciansOnAlbum() {
+		Album because = classUnderTest
+				.findAlbumByName(BECAUSE_THE_INTERNET, testAlbums.getTestAlbumList())
+				.get();
+		List<String> musicians = classUnderTest.getListOfMusiciansOnAlbum(because);
+	}
+
 }

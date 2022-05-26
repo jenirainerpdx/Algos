@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class StreamThings {
@@ -25,6 +26,12 @@ public class StreamThings {
 		return artists.stream()
 				.filter(artist -> artist.getOrigin().equalsIgnoreCase(location))
 				.collect(Collectors.toList());
+	}
+
+	public Optional<Album> findAlbumByName(String albumName, List<Album> albums) {
+		return albums.stream()
+				.filter(album -> album.getName().equalsIgnoreCase(albumName))
+				.findFirst();
 	}
 
 	/**
@@ -64,17 +71,42 @@ public class StreamThings {
 	public Map<String, Integer> getTrackCountsByAlbumName(List<Album> albums) {
 		Map<String, Integer> unsorted = albums.stream()
 				.collect(Collectors.toMap(
-						album -> album.getName(),
+						Album::getName,
 						album -> album.getTracks().size()
 				));
 		return unsorted.entrySet()
 				.stream()
 				.sorted(Map.Entry.comparingByValue())
-				.collect(Collectors.toMap(entry -> entry.getKey(),
-						entry -> entry.getValue(),
+				.collect(Collectors.toMap(Map.Entry::getKey,
+						Map.Entry::getValue,
 						(e1, e2) -> e1, LinkedHashMap::new));
 	}
 
+	/**
+	 * We probably don't need the sort, above - I'll leave it in because in some cases, it could be important to have.
+	 * But, we have min and max... so, let's try that.
+	 *
+	 * @param albums List of Album objects
+	 * @return Album the album with the most tracks.
+	 */
+	public Album findAlbumWithMostTracks(List<Album> albums) {
+		return albums.stream()
+				.max(Comparator.comparing(album -> album.getTracks().size()))
+				.get();
+	}
+
+	public Album findAlbumWithBiggestBand(List<Album> albums) {
+		return albums.stream()
+				.max(Comparator.comparing(album -> getListOfMusiciansOnAlbum(album).size()))
+				.get();
+	}
+
+	 List<String> getListOfMusiciansOnAlbum(Album album) {
+		return album.getMusicians()
+				.stream()
+				.flatMap(musician -> musician.getMemberNames().stream())
+				.collect(Collectors.toList());
+	}
 
 	/**
 	 * @param a - Album
