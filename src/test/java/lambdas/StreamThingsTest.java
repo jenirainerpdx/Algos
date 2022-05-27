@@ -78,7 +78,7 @@ class StreamThingsTest {
 		Track first = actual.get(0);
 		Track last = actual.get(actual.size() - 1);
 		assertEquals("3005", first.getName());
-		assertEquals("When We Were Young", last.getName());
+		assertEquals("Zoo Station", last.getName());
 
 	}
 
@@ -126,7 +126,7 @@ class StreamThingsTest {
 	@Test
 	public void testGetAlbumSetTrackCount() {
 		Long count = classUnderTest.getCountOfAllTracksInCollection(testAlbums.getTestAlbumList());
-		assertEquals(68L, count);
+		assertEquals(69L, count);
 	}
 
 }
