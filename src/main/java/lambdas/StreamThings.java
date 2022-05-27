@@ -11,7 +11,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class StreamThings {
 
@@ -63,6 +62,23 @@ public class StreamThings {
 	}
 
 	/**
+	 * I feel confident I could simply call getAllTracksSortedByTrackName and then take the list size.
+	 * This is simply to exercise using reduce.
+	 * I need to use a reducing collector to get there, rather than simply calling reduce.
+	 *
+	 * @param albums List of Album objects in the collection
+	 * @return Long a count of all the tracks within the collection of Albums.
+	 * TODO: come back to this later.  I can't quite get beyond the acc needing to be different than the element, in terms of type.
+	 */
+	public Long getCountOfAllTracksInCollection(List<Album> albums) {
+		long acc = 0L;
+		for (Album album : albums) {
+			acc = (acc + album.getTracks().size());
+		}
+		return acc;
+	}
+
+	/**
 	 * Somewhat convoluted for the sorting of the map.  Not sure if it is efficient.
 	 *
 	 * @param albums List of Album objects
@@ -97,13 +113,14 @@ public class StreamThings {
 	}
 
 	/**
-	 * Probably should not handle the optional like this.
+	 * TODO: Investigate how to cleanly handle the optional.
+	 *
 	 * @param albums List of Album objects
 	 * @return an Album - the one with the most musicians.
 	 * @throws Exception - if no Album is found while doing this evaluation.
 	 */
 	public Album findAlbumWithBiggestBand(List<Album> albums) throws Exception {
-		Optional<Album> biggestBandOption =  albums.stream()
+		Optional<Album> biggestBandOption = albums.stream()
 				.max(Comparator.comparing(album -> getListOfMusiciansOnAlbum(album).size()));
 		if (biggestBandOption.isPresent()) {
 			return biggestBandOption.get();
@@ -118,7 +135,7 @@ public class StreamThings {
 	 * @return list of Musicians that are in all the Artists associated with the album.
 	 * Structure is Album -> [Artist] where each Artist -> [Musician]
 	 */
-	 List<String> getListOfMusiciansOnAlbum(Album album) {
+	List<String> getListOfMusiciansOnAlbum(Album album) {
 		return album.getMusicians()
 				.stream()
 				.flatMap(musician -> musician.getMemberNames().stream())

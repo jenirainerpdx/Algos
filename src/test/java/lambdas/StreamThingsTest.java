@@ -123,4 +123,10 @@ class StreamThingsTest {
 		assertEquals(5, musicians.size());
 	}
 
+	@Test
+	public void testGetAlbumSetTrackCount() {
+		Long count = classUnderTest.getCountOfAllTracksInCollection(testAlbums.getTestAlbumList());
+		assertEquals(68L, count);
+	}
+
 }
