@@ -6,7 +6,9 @@ import lambdas.domain.Track;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,7 +37,7 @@ public class TestAlbums {
 
 	private void buildTestAlbumList() {
 		testAlbumList = new ArrayList<>();
-		Artist adele = new Artist("Adele", Set.of("Adele"), "London");
+		Artist adele = new Artist("Adele", Collections.emptySet(), "London", false);
 		Album adele21 = new Album("21",
 				List.of(new Track("Rolling in the Deep", "3:49"),
 						new Track("Rumour Has It", "3:43"),
@@ -63,11 +65,12 @@ public class TestAlbums {
 						new Track("Sweetest Devotion", "4:12")),
 				List.of(adele));
 		testAlbumList.add(adele25);
-		Artist childish = new Artist("Childish Gambino", Set.of("Donald Glover"), "California");
-		Artist jhene = new Artist("Jhene Aiko", Set.of("Jhene"), UNKNOWN_ORIGIN);
-		Artist chance = new Artist("Chance the Rapper", Set.of("Chance"), UNKNOWN_ORIGIN);
-		Artist banks = new Artist("Azealia Banks", Set.of("Banks"), UNKNOWN_ORIGIN);
-		Artist misc = new Artist("Not really an artist", Set.of("Unknown"), UNKNOWN_ORIGIN);
+		Artist donald = buildIndividualArtist("Donald Glover", Optional.of("California"));
+		Artist jhene = buildIndividualArtist("Jhene Aiko", Optional.empty());
+		Artist chance = buildIndividualArtist("Chance the Rapper", Optional.empty());
+		Artist banks = buildIndividualArtist("Azealia Banks", Optional.empty());
+		Artist misc = buildIndividualArtist("Not really an artist", Optional.empty());
+		Artist childish = new Artist("Childish Gambino", Set.of(donald, jhene, chance, banks, misc), "California", true);
 		Album gambinoBecause = new Album("Because the Internet",
 				List.of(new Track("The Library (Intro)", UNKNOWN_TRACK_LENGTH),
 						new Track("I.Crawl", UNKNOWN_TRACK_LENGTH),
@@ -90,7 +93,12 @@ public class TestAlbums {
 						new Track("III. Life: The Biggest Troll [Andrew Auernheimer]", UNKNOWN_TRACK_LENGTH)),
 				List.of(childish, jhene, chance, banks, misc));
 		testAlbumList.add(gambinoBecause);
-		Artist U2 = new Artist("U2", Set.of("Bono", "Edge", "Adam Clayton", "Larry Mullen Jr."), "Ireland");
+
+		Artist bono = buildIndividualArtist("Bono", Optional.empty());
+		Artist edge = buildIndividualArtist("Edge", Optional.empty());
+		Artist adam = buildIndividualArtist("Adam Clayton", Optional.empty());
+		Artist larry = buildIndividualArtist("Larry Mullen Jr.", Optional.empty());
+		Artist U2 = new Artist("U2", Set.of(bono, edge, adam, larry), "Ireland", true);
 		Album rattleAndHum = new Album("Rattle and Hum",
 				List.of(
 						new Track("Helter Skelter", "3:07"),
@@ -129,5 +137,23 @@ public class TestAlbums {
 						new Track("Love is Blindness", "4:23")),
 				List.of(U2));
 		testAlbumList.add(achtung);
+		Artist singer = buildIndividualArtist("Singer in Band1", Optional.of("Galway"));
+		Artist drummer = buildIndividualArtist("Drummer in Band2", Optional.of("Sydney"));
+		Artist band1 = new Artist("Band1", Set.of(singer), "Ireland", Boolean.TRUE);
+		Artist band2 = new Artist("Band2", Set.of(drummer), "Australia", Boolean.TRUE);
+		Artist guitar = buildIndividualArtist("Guitarist", Optional.empty());
+		Artist compoundBand = new Artist("Band of Bands", Set.of(band1, band2, guitar), "Liverpool", Boolean.TRUE);
+		Album fakeAlbum = new Album(
+				"fake Album",
+				List.of(
+						new Track("Fake Track", "14:73")
+				),
+				List.of(compoundBand)
+		);
+		testAlbumList.add(fakeAlbum);
+	}
+
+	private Artist buildIndividualArtist(String name, Optional<String> location) {
+		return new Artist(name, Collections.emptySet(), location.orElse(UNKNOWN_ORIGIN), Boolean.FALSE);
 	}
 }

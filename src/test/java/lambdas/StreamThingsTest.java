@@ -9,7 +9,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +36,8 @@ class StreamThingsTest {
 			"25",
 			"BECAUSE THE INTERNET",
 			"RATTLE AND HUM",
-			"ACHTUNG BABY"
+			"ACHTUNG BABY",
+			"FAKE ALBUM"
 	);
 
 	private List<Album> buildMalformedList() {
@@ -126,7 +130,45 @@ class StreamThingsTest {
 	@Test
 	public void testGetAlbumSetTrackCount() {
 		Long count = classUnderTest.getCountOfAllTracksInCollection(testAlbums.getTestAlbumList());
-		assertEquals(69L, count);
+		assertEquals(70L, count);
+	}
+
+	@Test
+	public void testGetArtists() {
+		List<Artist> actual = testAlbums.getAllArtists();
+		assertEquals(8, actual.size(),
+				"The artists list includes: adele, childish, jhene, chance, banks, 'not really an artist', compoundband and u2");
+		List<Artist> adeleList = actual
+				.stream()
+				.filter(artist ->
+						artist.getName().equalsIgnoreCase("Adele")
+				)
+				.collect(Collectors.toList());
+		assertEquals(1, adeleList.size(),
+				"We should find a single artist named Adele.");
+		Artist adele = adeleList.get(0);
+		assertEquals("Adele", adele.getName());
+		assertEquals("London", adele.getOrigin());
+	}
+
+	@Test
+	public void testFindLondonArtists() {
+		List<Artist> artistsFromLondon = testAlbums.getAllArtists()
+				.stream()
+				.filter(a -> Objects.equals(a.getOrigin(), "London"))
+				.collect(Collectors.toList());
+		assertEquals(1, artistsFromLondon.size(),
+				"Only Adele is from London.");
+	}
+
+	@Test
+	public void testGetLocationsOfBandsForAlbum(){
+		Album compound = classUnderTest
+				.findAlbumByName("fake Album", testAlbums.getTestAlbumList())
+				.get();
+		Set<String> places = classUnderTest.getListOfBandLocationsForAnAlbum(compound);
+		Set<String> expected = Set.of("Ireland", "Australia");
+		assertEquals(expected, places);
 	}
 
 }

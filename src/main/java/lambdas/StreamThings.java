@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StreamThings {
@@ -138,8 +139,19 @@ public class StreamThings {
 	List<String> getListOfMusiciansOnAlbum(Album album) {
 		return album.getMusicians()
 				.stream()
-				.flatMap(musician -> musician.getMemberNames().stream())
+				.flatMap(musician -> musician.getMembers().stream())
+				.filter(artist -> !artist.isBand())
+				.map(Artist::getName)
 				.collect(Collectors.toList());
+	}
+
+	public Set<String> getListOfBandLocationsForAnAlbum(Album album) {
+		return album.getMusicians()
+				.stream()
+				.flatMap(musician -> musician.getMembers().stream())
+				.filter(Artist::isBand)
+				.map(Artist::getOrigin)
+				.collect(Collectors.toUnmodifiableSet());
 	}
 
 	/**

@@ -5,13 +5,15 @@ import java.util.Set;
 public class Artist {
 
 	private String name;
-	private Set<String> memberNames;
+	private Set<Artist> members;
 	private String origin;
+	private boolean band;
 
-	public Artist(String name, Set<String> members, String origin) {
+	public Artist(String name, Set<Artist> members, String origin, boolean isArtistABand) {
 		this.name = name;
-		this.memberNames = members;
+		this.members = members;
 		this.origin = origin;
+		this.band = isArtistABand;
 	}
 
 	public String getName() {
@@ -22,12 +24,12 @@ public class Artist {
 		this.name = name;
 	}
 
-	public Set<String> getMemberNames() {
-		return memberNames;
+	public Set<Artist> getMembers() {
+		return members;
 	}
 
-	public void setMemberNames(Set<String> memberNames) {
-		this.memberNames = memberNames;
+	public void setMembers(Set<Artist> members) {
+		this.members = members;
 	}
 
 	public String getOrigin() {
@@ -36,5 +38,13 @@ public class Artist {
 
 	public void setOrigin(String origin) {
 		this.origin = origin;
+	}
+
+	public boolean isBand() {
+		return band;
+	}
+
+	public void setBand(boolean band) {
+		this.band = band;
 	}
 }
