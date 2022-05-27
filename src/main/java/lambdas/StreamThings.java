@@ -11,6 +11,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class StreamThings {
 
@@ -95,12 +96,28 @@ public class StreamThings {
 				.get();
 	}
 
-	public Album findAlbumWithBiggestBand(List<Album> albums) {
-		return albums.stream()
-				.max(Comparator.comparing(album -> getListOfMusiciansOnAlbum(album).size()))
-				.get();
+	/**
+	 * Probably should not handle the optional like this.
+	 * @param albums List of Album objects
+	 * @return an Album - the one with the most musicians.
+	 * @throws Exception - if no Album is found while doing this evaluation.
+	 */
+	public Album findAlbumWithBiggestBand(List<Album> albums) throws Exception {
+		Optional<Album> biggestBandOption =  albums.stream()
+				.max(Comparator.comparing(album -> getListOfMusiciansOnAlbum(album).size()));
+		if (biggestBandOption.isPresent()) {
+			return biggestBandOption.get();
+		} else {
+			throw new Exception("No Album found.");
+		}
+
 	}
 
+	/**
+	 * @param album an Album object
+	 * @return list of Musicians that are in all the Artists associated with the album.
+	 * Structure is Album -> [Artist] where each Artist -> [Musician]
+	 */
 	 List<String> getListOfMusiciansOnAlbum(Album album) {
 		return album.getMusicians()
 				.stream()

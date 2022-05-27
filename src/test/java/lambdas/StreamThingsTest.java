@@ -55,7 +55,7 @@ class StreamThingsTest {
 	public void testGetArtistOfUnknownOrigin() {
 		List<Artist> actual = classUnderTest.findArtistsFromLocation(TestAlbums.UNKNOWN_ORIGIN,
 				testAlbums.getAllArtists());
-		assertEquals(3, actual.size(), "There are 3 in the group which have unknown origin.");
+		assertEquals(4, actual.size(), "There are 4 in the group which have unknown origin.");
 	}
 
 	@Test
@@ -99,11 +99,8 @@ class StreamThingsTest {
 		assertEquals(BECAUSE_THE_INTERNET, mostTracks.getName());
 	}
 
-	/**
-	 * This test currently fails.  There is something incorrect in my logic.  Not flatmapping correctly yet.
-	 */
 	@Test
-	public void testGetAlbumWithMostArtists() {
+	public void testGetAlbumWithMostArtists() throws Exception {
 		Album mostArtists = classUnderTest.findAlbumWithBiggestBand(testAlbums.getTestAlbumList());
 		assertEquals(BECAUSE_THE_INTERNET, mostArtists.getName());
 	}
@@ -123,6 +120,7 @@ class StreamThingsTest {
 				.findAlbumByName(BECAUSE_THE_INTERNET, testAlbums.getTestAlbumList())
 				.get();
 		List<String> musicians = classUnderTest.getListOfMusiciansOnAlbum(because);
+		assertEquals(5, musicians.size());
 	}
 
 }

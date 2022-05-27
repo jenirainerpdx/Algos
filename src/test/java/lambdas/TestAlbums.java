@@ -65,10 +65,10 @@ public class TestAlbums {
 		);
 		testAlbumList.add(adele25);
 		Artist childish = new Artist("Childish Gambino", Set.of("Donald Glover"), "California");
-		Artist jhene = new Artist("Jhene Aiko", Collections.emptySet(), UNKNOWN_ORIGIN);
-		Artist chance = new Artist("Chance the Rapper", Collections.emptySet(), UNKNOWN_ORIGIN);
-		Artist banks = new Artist("Azealia Banks", Collections.emptySet(), UNKNOWN_ORIGIN);
-		Artist misc = new Artist("Not really an artist", Collections.emptySet(), UNKNOWN_ORIGIN);
+		Artist jhene = new Artist("Jhene Aiko", Set.of("Jhene"), UNKNOWN_ORIGIN);
+		Artist chance = new Artist("Chance the Rapper", Set.of("Chance"), UNKNOWN_ORIGIN);
+		Artist banks = new Artist("Azealia Banks", Set.of("Banks"), UNKNOWN_ORIGIN);
+		Artist misc = new Artist("Not really an artist", Set.of("Unknown"), UNKNOWN_ORIGIN);
 		Album gambinoBecause = new Album(
 				List.of("The Library (Intro)",
 						"I.Crawl",
