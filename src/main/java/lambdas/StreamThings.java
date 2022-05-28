@@ -57,7 +57,7 @@ public class StreamThings {
 	 */
 	public List<Track> getAllTracksSortedByTrackName(List<Album> albums) {
 		return albums.stream()
-				.flatMap(album -> album.getTracks().stream())
+				.flatMap(Album::getTracks)
 				.sorted(Comparator.comparing(Track::getName))
 				.collect(Collectors.toList());
 	}
@@ -74,7 +74,7 @@ public class StreamThings {
 	public Long getCountOfAllTracksInCollection(List<Album> albums) {
 		long acc = 0L;
 		for (Album album : albums) {
-			acc = (acc + album.getTracks().size());
+			acc = (acc + album.getTracks().count());
 		}
 		return acc;
 	}
@@ -86,11 +86,11 @@ public class StreamThings {
 	 * @return a linkedHashMap so that it holds sorting where the Album Name is key and the value is count of tracks.
 	 * Sort order is by count of tracks in asc.
 	 */
-	public Map<String, Integer> getTrackCountsByAlbumName(List<Album> albums) {
-		Map<String, Integer> unsorted = albums.stream()
+	public Map<String, Long> getTrackCountsByAlbumName(List<Album> albums) {
+		Map<String, Long> unsorted = albums.stream()
 				.collect(Collectors.toMap(
 						Album::getName,
-						album -> album.getTracks().size()
+						album -> album.getTracks().count()
 				));
 		return unsorted.entrySet()
 				.stream()
@@ -101,16 +101,30 @@ public class StreamThings {
 	}
 
 	/**
-	 * We probably don't need the sort, above - I'll leave it in because in some cases, it could be important to have.
-	 * But, we have min and max... so, let's try that.
+	 * I don't know how to do this with a reduce...
+	 * I have to get the max from a Stream of Streams.
+	 * Nested stream collect type ops don't work.
+	 * At this point, the only option I can see as viable is calling max on
+	 * the values of the map returned by the getTrackCountsByAlbumName.
 	 *
 	 * @param albums List of Album objects
 	 * @return Album the album with the most tracks.
 	 */
-	public Album findAlbumWithMostTracks(List<Album> albums) {
-		return albums.stream()
-				.max(Comparator.comparing(album -> album.getTracks().size()))
-				.get();
+	public Album findAlbumWithMostTracks(List<Album> albums) throws Exception {
+		Album albumWithMost;
+		// treating the map as unsorted for learning purposes.
+		Map<String, Long> trackCountByAlbumName = getTrackCountsByAlbumName(albums);
+		Optional<Map.Entry<String, Long>> mostTracks = trackCountByAlbumName
+				.entrySet()
+				.stream()
+				.max(Map.Entry.comparingByValue());
+		if (mostTracks.isPresent()) {
+			String albumName = mostTracks.get().getKey();
+			albumWithMost = findAlbumByName(albumName, albums).get();
+		} else {
+			throw new Exception("Unable to find album with tracks in this list.");
+		}
+		return albumWithMost;
 	}
 
 	/**

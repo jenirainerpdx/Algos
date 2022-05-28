@@ -19,9 +19,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class StreamThingsTest {
 
 	private static final String BECAUSE_THE_INTERNET = "Because the Internet";
-	private StreamThings classUnderTest = new StreamThings();
-	private TestAlbums testAlbums = new TestAlbums();
-	private Album malformedAlbum;
+	private final StreamThings classUnderTest = new StreamThings();
+	private final TestAlbums testAlbums = new TestAlbums();
+	private final Album malformedAlbum;
 
 	{
 		malformedAlbum = new Album(null,
@@ -29,9 +29,9 @@ class StreamThingsTest {
 				Collections.EMPTY_LIST);
 	}
 
-	private List<Album> albumsWithMalformed = buildMalformedList();
+	private final List<Album> albumsWithMalformed = buildMalformedList();
 
-	private List<String> albumNames = List.of(
+	private final List<String> albumNames = List.of(
 			"21",
 			"25",
 			"BECAUSE THE INTERNET",
@@ -88,17 +88,17 @@ class StreamThingsTest {
 
 	@Test
 	public void testGetAlbumsByTrackCount() {
-		Map<String, Integer> actual = classUnderTest.getTrackCountsByAlbumName(testAlbums.getTestAlbumList());
-		int previousAlbumCount = 0;
+		Map<String, Long> actual = classUnderTest.getTrackCountsByAlbumName(testAlbums.getTestAlbumList());
+		long previousAlbumCount = 0L;
 		for (String album : actual.keySet()) {
-			int currentVal = actual.get(album);
+			long currentVal = actual.get(album);
 			assertTrue(currentVal > previousAlbumCount);
 			previousAlbumCount = currentVal;
 		}
 	}
 
 	@Test
-	public void testGetAlbumWithLargestTrackCount() {
+	public void testGetAlbumWithLargestTrackCount() throws Exception {
 		Album mostTracks = classUnderTest.findAlbumWithMostTracks(testAlbums.getTestAlbumList());
 		assertEquals(BECAUSE_THE_INTERNET, mostTracks.getName());
 	}
@@ -162,7 +162,7 @@ class StreamThingsTest {
 	}
 
 	@Test
-	public void testGetLocationsOfBandsForAlbum(){
+	public void testGetLocationsOfBandsForAlbum() {
 		Album compound = classUnderTest
 				.findAlbumByName("fake Album", testAlbums.getTestAlbumList())
 				.get();

@@ -1,16 +1,17 @@
 package lambdas.domain;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Album {
 
 	private String name;
-	private List<Track> tracks;
+	private Stream<Track> tracks;
 	private List<Artist> musicians;
 
 	public Album(String albumName, List<Track> tracks, List<Artist> artists) {
 		this.name = albumName;
-		this.tracks = tracks;
+		this.tracks = tracks.stream();
 		this.musicians = artists;
 	}
 
@@ -22,11 +23,11 @@ public class Album {
 		this.name = name;
 	}
 
-	public List<Track> getTracks() {
+	public Stream<Track> getTracks() {
 		return tracks;
 	}
 
-	public void setTracks(List<Track> tracks) {
+	public void setTracks(Stream<Track> tracks) {
 		this.tracks = tracks;
 	}
 
