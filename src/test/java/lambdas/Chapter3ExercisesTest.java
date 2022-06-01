@@ -4,8 +4,12 @@ import lambdas.domain.Album;
 import lambdas.domain.Artist;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -81,5 +85,35 @@ class Chapter3ExercisesTest {
 		Stream<Album> testAlbumsToLimit = testAlbums.getTestAlbumList().stream();
 		Stream<Album> actual = classUnderTest.limitAListOfAlbums(testAlbumsToLimit);
 		assertEquals(2, actual.count());
+	}
+
+	@ParameterizedTest
+	@Timeout(1L)
+	@CsvSource({
+			"abcd, 4",
+			"HELLO WORLD!, 0",
+			"Hello Mabel., 8",
+			"1008, 0"
+	})
+	public void testCountLCChars(String inString, int expected){
+		assertEquals(expected, classUnderTest.countLowercaseLetters(inString));
+	}
+
+	@Test
+	public void testFindStringWithMostLCLetters(){
+		List<String> inputList = List.of(
+				"Hello",
+				"abcdefghijklmno",
+				"a"
+		);
+		assertEquals(Optional.of("abcdefghijklmno"),
+				classUnderTest.findStringWithMostLowercaseLetters(inputList));
+	}
+
+	@Test
+	public void testFindStringWithMostLCLettersEmptyList(){
+		List<String> inputList = Collections.emptyList();
+		assertEquals(Optional.empty(),
+				classUnderTest.findStringWithMostLowercaseLetters(inputList));
 	}
 }
