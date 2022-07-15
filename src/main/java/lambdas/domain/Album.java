@@ -1,5 +1,6 @@
 package lambdas.domain;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -8,6 +9,12 @@ public class Album {
 	private String name;
 	private Stream<Track> tracks;
 	private List<Artist> musicians;
+
+	public Album(String name, Stream<Track> trackStream, List<Artist> artists) {
+		this.name = name;
+		this.tracks = trackStream;
+		this.musicians = artists;
+	}
 
 	public Album(String albumName, List<Track> tracks, List<Artist> artists) {
 		this.name = albumName;

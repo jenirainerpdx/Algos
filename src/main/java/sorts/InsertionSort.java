@@ -1,3 +1,5 @@
+package sorts;
+
 public class InsertionSort {
 
 	public static int[] insertionSort(int input[]) {
