@@ -1,4 +1,4 @@
-package doubleLinkedList;
+package dataStructures.doubleLinkedList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

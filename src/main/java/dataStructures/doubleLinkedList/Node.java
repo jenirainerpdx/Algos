@@ -1,4 +1,4 @@
-package doubleLinkedList;
+package dataStructures.doubleLinkedList;
 
 class Node<E> {
 	private Node<E> previous;

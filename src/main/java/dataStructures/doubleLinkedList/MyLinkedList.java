@@ -1,4 +1,4 @@
-package doubleLinkedList;
+package dataStructures.doubleLinkedList;
 
 public class MyLinkedList<E> {
 	private final Node<E> head;

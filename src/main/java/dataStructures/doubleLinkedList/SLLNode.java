@@ -1,4 +1,4 @@
-package doubleLinkedList;
+package dataStructures.doubleLinkedList;
 
 class SLLNode<E> {
 

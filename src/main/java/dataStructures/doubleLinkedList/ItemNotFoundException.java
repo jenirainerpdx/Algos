@@ -1,4 +1,4 @@
-package doubleLinkedList;
+package dataStructures.doubleLinkedList;
 
 public class ItemNotFoundException extends Exception {
 	public ItemNotFoundException(String message) {
