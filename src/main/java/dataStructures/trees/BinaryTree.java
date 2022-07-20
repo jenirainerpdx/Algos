@@ -3,7 +3,7 @@ package dataStructures.trees;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class BinaryTree<E> {
+public class BinaryTree<E extends Comparable<? super E>> {
 
 	TreeNode<E> root;
 
@@ -59,6 +59,9 @@ public class BinaryTree<E> {
 		}
 	}
 
+	/**
+	 * This is breadth first traversal.
+	 */
 	public void levelOrder() {
 		Queue<TreeNode<E>> queue = new LinkedList<>();
 		queue.add(root);
@@ -70,6 +73,28 @@ public class BinaryTree<E> {
 				queue.add(current.getRightChild());
 			}
 		}
+	}
+
+	/**
+	 * @param findElement the element to find.
+	 * @return the node with the found element.  If not found, returns null.
+	 */
+	public TreeNode<E> binarySearch(E findElement){
+		TreeNode<E> foundNode = null;
+		TreeNode<E> branchParent = root;
+		while(branchParent != null) {
+			E branchParentElement = branchParent.getValue();
+			if (branchParentElement.equals(findElement)) {
+				foundNode = branchParent;
+				break;
+			} else if (branchParentElement.compareTo(findElement) < 0 ) {
+				// branchParent is less than the element to find
+				branchParent = branchParent.getRightChild();
+			} else {
+				branchParent = branchParent.getLeftChild();
+			}
+		}
+		return foundNode;
 	}
 
 

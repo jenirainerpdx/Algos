@@ -42,5 +42,20 @@ class BinaryTreeTest {
 		assertEquals(cNode, gNode.getParent());
 	}
 
+	@Test
+	public void binarySearchSimpleTest() throws PreexistingNodeException {
+		TreeNode<String> root = new TreeNode<>("E", null);
+		TreeNode<String> bNode = root.addLeftChild("B");
+		TreeNode<String> aNode = bNode.addLeftChild("A");
+		TreeNode<String> cNode = bNode.addRightChild("C");
+		TreeNode<String> mNode = root.addRightChild("M");
+		TreeNode<String> lNode = mNode.addLeftChild("L");
+		TreeNode<String> qNode = mNode.addRightChild("Q");
+		BinaryTree<String> testTree = new BinaryTree<>(root);
+		TreeNode<String> foundC = testTree.binarySearch("C");
+		assertEquals(cNode, foundC);
+		assertNull(testTree.binarySearch("Z"));
+
+	}
 
 }
