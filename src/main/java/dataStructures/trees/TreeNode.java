@@ -1,8 +1,13 @@
 package dataStructures.trees;
 
-public class TreeNode<E> {
-	private final E value;
-	private final TreeNode<E> parent;
+public class TreeNode<E extends Comparable<? super E>> {
+	private E value;
+	private TreeNode<E> parent;
+
+	public void setLeftChild(TreeNode<E> leftChild) {
+		this.leftChild = leftChild;
+	}
+
 	private TreeNode<E> leftChild;
 	private TreeNode<E> rightChild;
 
@@ -34,6 +39,17 @@ public class TreeNode<E> {
 		return right;
 	}
 
+	public int howManyChildren() {
+		int childCount = 0;
+		if (this.leftChild != null) {
+			childCount++;
+		}
+		if (this.rightChild != null) {
+			childCount++;
+		}
+		return childCount;
+	}
+
 	public E getValue() {
 		return value;
 	}
@@ -52,5 +68,36 @@ public class TreeNode<E> {
 
 	public void visit() {
 		System.out.println("Visiting this node: " + getValue().toString());
+	}
+
+	/**
+	 * Really a destructor of sorts. It will no longer be referenced in the tree.
+	 */
+	public void detachFromParent() throws CannotDetachRootException {
+		if (parent == null) throw new CannotDetachRootException("This is the root node.  No parent.");
+		if (isLeftChild()) {
+			parent.leftChild = null;
+		} else {
+			parent.rightChild = null;
+		}
+		// for hygiene, set parent to null.
+		parent = null;
+	}
+
+	private boolean isLeftChild() {
+		Boolean left = Boolean.FALSE;
+		E parentValue = parent.getValue();
+		if (parentValue.compareTo(value) > 0) {
+			left = Boolean.TRUE;
+		}
+		return left;
+	}
+
+	public void setParent(TreeNode<E> parent) {
+		this.parent = parent;
+	}
+
+	public void setValue(E val) {
+		value = val;
 	}
 }
