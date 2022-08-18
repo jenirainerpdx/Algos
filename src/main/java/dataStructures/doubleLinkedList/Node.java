@@ -1,9 +1,9 @@
 package dataStructures.doubleLinkedList;
 
-class Node<E> {
+public class Node<E> {
 	private Node<E> previous;
 	private Node<E> next;
-	private E data;
+	private final E data;
 
 	public Node(E dta){
 		data = dta;
@@ -27,10 +27,6 @@ class Node<E> {
 
 	public E getData() {
 		return data;
-	}
-
-	public void setData(E data) {
-		this.data = data;
 	}
 
 	@Override
